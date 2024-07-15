@@ -59,6 +59,7 @@
             width: 100%;
             border-radius: 10px;
             padding: 20px;
+            
         }
         #container2 button{
             position : absolute;
@@ -169,15 +170,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="./product.php"><strong>로드맵</strong></a>
                         </li>
-                        <div id="container2">
-                            <input id="mainsearch" type="text" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요">
+                        <form class="d-flex" role="search" id="container" style="width:350px">
+                            <input class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button>🔍</button>
-                        </div>
+                        </form>
                             <?php
                                 if(!isset($_SESSION['login'])){
 
                             ?>
-                            <li class="nav-item">
+                            <li class="nav-item" style="flex:right">
                                 <a class="nav-link" href="./login/user_login.php"><strong>로그인</strong></a>
                             </li>
                             <?php
@@ -290,25 +291,25 @@
         <h4 style="margin-top:20px"><strong>내가 좋아할만한 다른 강의</strong></h4>
         <div id="lecture-img">
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=cipher">
-                    <img src="./images/linux.png" alt="암호학" style="width:200px; margin:20px;">
-                    <span><strong>리눅스 시스템 프로그래밍</strong></span>
+                <a href="./lecture?div=unity">
+                    <img src="./images/1.png" alt="암호학" style="width:220px; margin:20px;">
+                    <span><strong>[UNITY] 유니티로 입문하는 게임 프로그래밍</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=data">
-                    <img src="./images/reversing.jpg" alt="데이터" style="width:200px; margin:20px;">
-                    <span><strong>윈도우즈 리버싱</strong></span>
+                <a href="./lecture?div=virus">
+                    <img src="./images/2.png" alt="데이터" style="width:220px; margin:20px;">
+                    <span><strong>[악성코드] 인공지능을 이용한 악성코드 분석 및 탐지</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=data">
-                    <img src="./images/android.png" alt="데이터" style="width:200px; margin:20px;">
-                    <span><strong>안드로이드 루팅</strong></span>
+                <a href="./lecture?div=ios">
+                    <img src="./images/3.png" alt="데이터" style="width:220px; margin:20px;">
+                    <span><strong>[iOS] iOS 프로그래밍 - 이론과 실습</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=data">
+                <a href="./lecture?div=">
                     <img src="./images/kernal.jpeg" alt="데이터" style="width:200px; margin:20px;">
                     <span><strong>리눅스 커널 해킹 A-Z까지</strong></span>
                 </a>
@@ -342,11 +343,12 @@
                     <img src="./images/test4.jpg" alt="데이터" style="width:200px; margin:20px;">
                     <span><strong>영상편집의 정점, 캠컷</strong></span>
                 </a>
+            </div>
         </div>
         <!-- 얼리버드 할인중인 신규 강의 목록 -->
          
         <!-- 기본부터 실무까지 제시해주는 로드맵 -->
-        <h4 style="margin-top:20px"><strong>내가 좋아할만한 다른 강의</strong></h4>
+        <h4 style="margin-top:20px"><strong>기본부터 실무까지 제시해주는 로드맵<span style="font-size:15px; color:red">🏃🏻‍♀️ RoadMap!!</span></strong></h4>
         <div id="lecture-img">
             <div class="lecture-item" style="width:250px">
                 <a href="./lecture?div=cipher">
