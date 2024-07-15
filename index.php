@@ -170,9 +170,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="./product.php"><strong>로드맵</strong></a>
                         </li>
-                        <form class="d-flex" role="search" id="container" style="width:350px">
-                            <input class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
-                            <button>🔍</button>
+                        <form class="d-flex" role="search" id="container" style="width:350px" action="./search/index.php">
+                            <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
+                            <button type="submit">🔍</button>
                         </form>
                             <?php
                                 if(!isset($_SESSION['login'])){
@@ -233,10 +233,10 @@
 
         <h4 style="text-align:center; margin:40px">배우고, 나누고, 성장하세요 !</h4>
         <!-- 중간 화면에 배치할 검색란 -> 배우고 싶은 분야를 검색하면 AI가 자동으로 해당 주제에 맞는 강의를 추천해줌 -->
-        <div id="container">
-            <input type="text" placeholder="배우고 싶은 분야를 검색해보세요">
-            <button>🔍</button>
-        </div>
+        <form id="container" action="ai/index.php">
+            <input name="keyword" type="text" placeholder="배우고 싶은 분야를 검색해보세요">
+            <button type="submit">🔍</button>
+        </form>
         <!-- 중간 화면에 배치할 검색란 -> 배우고 싶은 분야를 검색하면 AI가 자동으로 해당 주제에 맞는 강의를 추천해줌 -->
         
         <!-- 부트캠프, 보안, 스프링, 개발 등등 다양한 아이콘을 추가하여 클릭시 해당 강의목록으로 이동 -->
@@ -272,13 +272,13 @@
                 </a>
             </div>
             <div class="lecture-item">
-                <a href="./lecture?div=data">
+                <a href="./lecture/index.php?div=data">
                     <img src="./images/python.png" alt="파이썬" style="width:50px; margin:20px;">
                     <span>#파이썬</span>
                 </a>
             </div>
             <div class="lecture-item">
-                <a href="./lecture?div=data">
+                <a href="./lecture/index.php?div=data">
                     <img src="./images/network.png" alt="네트워크" style="width:50px; margin:20px;">
                     <span>#네트워크</span>
                 </a>
@@ -291,25 +291,25 @@
         <h4 style="margin-top:20px"><strong>내가 좋아할만한 다른 강의</strong></h4>
         <div id="lecture-img">
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=unity">
+                <a href="./lecture/index.php?div=unity">
                     <img src="./images/1.png" alt="암호학" style="width:220px; margin:20px;">
                     <span><strong>[UNITY] 유니티로 입문하는 게임 프로그래밍</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=virus">
+                <a href="./lecture/index.php?div=virus">
                     <img src="./images/2.png" alt="데이터" style="width:220px; margin:20px;">
                     <span><strong>[악성코드] 인공지능을 이용한 악성코드 분석 및 탐지</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=ios">
+                <a href="./lecture/index.php?div=ios">
                     <img src="./images/3.png" alt="데이터" style="width:220px; margin:20px;">
                     <span><strong>[iOS] iOS 프로그래밍 - 이론과 실습</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=">
+                <a href="./lecture/index.php?div=">
                     <img src="./images/kernal.jpeg" alt="데이터" style="width:200px; margin:20px;">
                     <span><strong>리눅스 커널 해킹 A-Z까지</strong></span>
                 </a>
@@ -351,25 +351,25 @@
         <h4 style="margin-top:20px"><strong>기본부터 실무까지 제시해주는 로드맵<span style="font-size:15px; color:red">🏃🏻‍♀️ RoadMap!!</span></strong></h4>
         <div id="lecture-img">
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=cipher">
+                <a href="./lecture/index.php?div=cipher">
                     <img src="./images/test.png" alt="암호학" style="width:200px; margin:20px;">
                     <span><strong>BoB 보안 컨설팅 트랙 합격 로드맵</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=data">
+                <a href="./lecture/index.php?div=data">
                     <img src="./images/java.png" alt="데이터" style="width:200px; margin:20px;">
                     <span><strong>정보보안 전문가 되기 - CS부터 시스템까지</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=data">
+                <a href="./lecture/index.php?div=data">
                     <img src="./images/coding.png" alt="데이터" style="width:200px; margin:20px;">
                     <span><strong>삼성전자 합격하는 코딩테스트</strong></span>
                 </a>
             </div>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture?div=data">
+                <a href="./lecture/index.php?div=data">
                     <img src="./images/full.png" alt="데이터" style="width:200px; margin:20px;">
                     <span><strong>풀스택 개발자 로드맵</strong></span>
                 </a>
