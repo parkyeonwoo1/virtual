@@ -6,18 +6,18 @@
     $query = 'SELECT * FROM lecture';
     $result = $db_conn->query($query);
     $rows = array();
-    // 레코드를 반복하여 배열에 저장
+
     while ($row = $result->fetch_assoc()) {
         $rows[] = $row;
     }
     $subjects = array(
         'sec' => array(1, 3, 5, 6),
         'game' => array(0, 2, 4, 7),
-        'dbms' => array(10),
+        'dbms' => array(10,21,22,23),
         'cs' => array(8, 9, 10, 11),
-        'network' => array(),
-        'cipher' => array(),
-        'programming' => array(0, 2, 7, 10)
+        'network' => array(16,17,18,19),
+        'cipher' => array(12,13,14,15),
+        'programming' => array(0, 2, 7, 4)
     );
 ?>
 <!DOCTYPE html>
@@ -181,17 +181,16 @@
                                 <strong>커뮤니티</strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">질문 & 답변</a></li>
-                                <li><a class="dropdown-item" href="#">수강평</a></li>
-                                <li><a class="dropdown-item" href="#">고민있어요</a></li>
-                                <li><a class="dropdown-item" href="#">스터디</a></li>
+                                <li><a class="dropdown-item" href="../community/qna.php">질문 & 답변</a></li>
+                                <li><a class="dropdown-item" href="../community/review.php">수강평</a></li>
+                                <li><a class="dropdown-item" href="../community/study.php">스터디</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../product.php"><strong>로드맵</strong></a>
+                            <a class="nav-link" href="../loadmap/index.php"><strong>로드맵</strong></a>
                         </li>
                         <form class="d-flex" role="search" id="container" style="width:350px" action="../search/index.php">
-                            <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
+                            <input autocomplete="off" name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button type="submit">🔍</button>
                         </form>
                             <?php
@@ -237,7 +236,7 @@
     <?php if ($_GET['gubun'] == 'sec'){ 
             for ($i = 0; $i < count($subjects['sec']); $i++){ ?>
             <div class="lecture-item" style="width:250px">
-                <a href="./lecture/index.php?div=<?=$subjects['sec'][$i]?>">
+                <a href="../lecture/index.php?div=<?=$subjects['sec'][$i]+1?>">
                     <img src="<?= $rows[$subjects['sec'][$i]]['img'] ?>" alt="<?= $rows[$subjects['sec'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                     <span><strong><?= $rows[$subjects['sec'][$i]]['name'] ?></strong></span>
                 </a>
@@ -245,7 +244,7 @@
         <?php }}else if($_GET['gubun'] == 'game'){ 
             for ($i = 0; $i < count($subjects['game']); $i++){ ?>
                 <div class="lecture-item" style="width:250px">
-                    <a href="./lecture/index.php?div=<?=$subjects['game'][$i]?>">
+                    <a href="../lecture/index.php?div=<?=$subjects['game'][$i]+1?>">
                         <img src="<?= $rows[$subjects['game'][$i]]['img'] ?>" alt="<?= $rows[$subjects['game'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                         <span><strong><?= $rows[$subjects['game'][$i]]['name'] ?></strong></span>
                     </a>
@@ -253,7 +252,7 @@
         <?php }}else if($_GET['gubun'] == 'dbms'){ 
             for ($i = 0; $i < count($subjects['dbms']); $i++){ ?>
                 <div class="lecture-item" style="width:250px">
-                    <a href="./lecture/index.php?div=<?=$subjects['dbms'][$i]?>">
+                    <a href="../lecture/index.php?div=<?=$subjects['dbms'][$i]+1?>">
                         <img src="<?= $rows[$subjects['dbms'][$i]]['img'] ?>" alt="<?= $rows[$subjects['dbms'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                         <span><strong><?= $rows[$subjects['dbms'][$i]]['name'] ?></strong></span>
                     </a>
@@ -261,7 +260,7 @@
         <?php }}else if($_GET['gubun'] == 'cs'){ 
             for ($i = 0; $i < count($subjects['cs']); $i++){ ?>
                 <div class="lecture-item" style="width:250px">
-                    <a href="./lecture/index.php?div=<?=$subjects['cs'][$i]?>">
+                    <a href="../lecture/index.php?div=<?=$subjects['cs'][$i]+1?>">
                         <img src="<?= $rows[$subjects['cs'][$i]]['img'] ?>" alt="<?= $rows[$subjects['cs'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                         <span><strong><?= $rows[$subjects['cs'][$i]]['name'] ?></strong></span>
                     </a>
@@ -269,7 +268,7 @@
         <?php }}else if($_GET['gubun'] == 'network'){ 
             for ($i = 0; $i < count($subjects['network']); $i++){ ?>
                 <div class="lecture-item" style="width:250px">
-                    <a href="./lecture/index.php?div=<?=$subjects['network'][$i]?>">
+                    <a href="../lecture/index.php?div=<?=$subjects['network'][$i]+1?>">
                         <img src="<?= $rows[$subjects['network'][$i]]['img'] ?>" alt="<?= $rows[$subjects['network'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                         <span><strong><?= $rows[$subjects['network'][$i]]['name'] ?></strong></span>
                     </a>
@@ -277,7 +276,7 @@
         <?php }}else if($_GET['gubun'] == 'cipher'){ 
             for ($i = 0; $i < count($subjects['cipher']); $i++){ ?>
                 <div class="lecture-item" style="width:250px">
-                    <a href="./lecture/index.php?div=<?=$subjects['cipher'][$i]?>">
+                    <a href="../lecture/index.php?div=<?=$subjects['cipher'][$i]+1?>">
                         <img src="<?= $rows[$subjects['cipher'][$i]]['img'] ?>" alt="<?= $rows[$subjects['cipher'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                         <span><strong><?= $rows[$subjects['cipher'][$i]]['name'] ?></strong></span>
                     </a>
@@ -285,7 +284,7 @@
         <?php }}else if($_GET['gubun'] == 'programming'){ 
             for ($i = 0; $i < count($subjects['programming']); $i++){ ?>
                 <div class="lecture-item" style="width:250px">
-                    <a href="./lecture/index.php?div=<?=$subjects['programming'][$i]?>">
+                    <a href="../lecture/index.php?div=<?=$subjects['programming'][$i]+1?>">
                         <img src="<?= $rows[$subjects['programming'][$i]]['img'] ?>" alt="<?= $rows[$subjects['programming'][$i]]['name'] ?>" style="width:220px; margin:20px;">
                         <span><strong><?= $rows[$subjects['programming'][$i]]['name'] ?></strong></span>
                     </a>

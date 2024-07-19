@@ -1,9 +1,12 @@
 <?php
     session_start();
     include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
+
+    $query = 'SELECT * FROM study';
+    $result = $db_conn->query($query);
+    $studys = [];
+    while ($row = $result->fetch_assoc()){
+        $studys[] = $row;
     }
 ?>
 <!DOCTYPE html>
@@ -135,6 +138,17 @@
             margin: auto;
             margin-top: 100px;
         }
+        .review-container{
+            padding: 20px; 
+            border: solid gray 0.1px; 
+            background-color: whitesmoke; 
+            border-radius: 5px; 
+            width: 800px; 
+            margin:auto;
+            overflow-wrap: break-word;
+            margin-top: 20px;
+            display : flex;
+        }
     </style>
 </head>
 <body>
@@ -173,10 +187,10 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../loadmap/index.php"><strong>로드맵</strong></a>
+                            <a class="nav-link" href="./index.php"><strong>로드맵</strong></a>
                         </li>
                         <form class="d-flex" role="search" id="container" style="width:350px" action="../search/index.php">
-                            <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
+                            <input autocomplete="off" name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button type="submit">🔍</button>
                         </form>
                             <?php
@@ -218,22 +232,14 @@
             </div>
         </nav>
         <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
-                    </div>
-                </form>
+         <div style="text-align:center; margin:auto; width:300px; height:100px;">
+         </div>
+         <div style="margin-bottom: 20px;">
+            <div class="review-container">
+                <img src="../images/1.png" alt="" style="max-width: 300px">
+                <div style="padding:10px;">
+                    <h2><strong><a href="" style="text-decoration: none; color:#333">dsf</a></strong></h2>
+                </div>
             </div>
         </div>
     </div>    

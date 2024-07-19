@@ -32,9 +32,6 @@
             echo "<script>alert('" . $username . "님 반갑습니다.');window.location.href='../index.php';</script>";
             exit();
         }else {
-            echo $real_password;
-            echo "   ";
-            echo $password;
             echo "<script>alert('아이디 또는 패스워드가 일치하지 않습니다.');history.back(-1);</script>";
             exit();
         }

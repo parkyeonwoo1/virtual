@@ -198,8 +198,8 @@
             animation: rainbow 3s infinite linear, blinking 1s infinite alternate;
         }
         .information-box-container {
-            height: 50vh; /* 큰 div 박스의 높이를 고정 */
-            overflow-y: auto; /* 내부에 스크롤 기능 추가 */
+            height: 50vh; 
+            overflow-y: auto;
             position: relative;
             mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
             -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
@@ -225,6 +225,7 @@
             height: 16vh;
             text-align:left;
         }
+        
     </style>
 </head>
 <body>
@@ -257,14 +258,13 @@
                                 <strong>커뮤니티</strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">질문 & 답변</a></li>
-                                <li><a class="dropdown-item" href="#">수강평</a></li>
-                                <li><a class="dropdown-item" href="#">고민있어요</a></li>
-                                <li><a class="dropdown-item" href="#">스터디</a></li>
+                                <li><a class="dropdown-item" href="./community/qna.php">질문 & 답변</a></li>
+                                <li><a class="dropdown-item" href="./community/review.php">수강평</a></li>
+                                <li><a class="dropdown-item" href="./community/study.php">스터디</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./product.php"><strong>로드맵</strong></a>
+                            <a class="nav-link" href="./loadmap/index.php"><strong>로드맵</strong></a>
                         </li>
                         <form class="d-flex" role="search" id="container" style="width:350px" action="./search/index.php">
                             <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px;" autocomplete="off">
@@ -311,23 +311,23 @@
         <!-- 부트스트랩 navbar -->
 
         <!-- 캐러셀 박스 -->
-        <div style="overflow: hidden; width: 100%; margin-top:10px">
+        <div style="overflow: hidden; width: 100%; margin-top:10px; margin-bottom:0px">
             <div class="slide-container">
                 <div class="slide-box">
-                    <img src="./image/ban1.png" alt="">
+                    <img src="./images/ban1.png" alt="">
                 </div>         
                 <div class="slide-box">
-                    <img src="./image/ban2.png" alt="">
+                    <img src="./images/ban2.png" alt="">
                 </div>   
                 <div class="slide-box">
-                    <img src="./image/ban3.png" alt="">
+                    <img src="./images/ban3.png" alt="">
                 </div>
             </div>
         </div>
         <!-- 캐러셀 박스 -->
 
 
-        <h4 style="text-align:center; margin:40px"><strong>배우고, 나누고, 성장하세요 !</strong></h4>
+        <h4 style="text-align:center; margin:40px; margin-top:0px"><strong>배우고, 나누고, 성장하세요 !</strong></h4>
         <!-- 중간 화면에 배치할 검색란 -> 배우고 싶은 분야를 검색하면 AI가 자동으로 해당 주제에 맞는 강의를 추천해줌 -->
         <form id="container" action="ai/index.php">
             <input name="keyword" type="text" placeholder="배우고 싶은 분야를 검색해보세요" autocomplete="off" autofocus>
@@ -464,5 +464,8 @@
             repeat(); 
         });
     </script>
+        <div class="footer">
+        <p>&copy; 2024 CodeLearn. All rights reserved.</p>
+    </div>
 </body>
 </html>

@@ -32,7 +32,6 @@
         $stmt = $db_conn->prepare($query);
         $stmt->bind_param('ss', $username, $password);  // 수정된 부분
         $stmt->execute();
-        echo $password;
         echo "<script>alert('회원가입이 완료되었습니다.');window.location.href='./login.php'</script>";
         exit();
     }

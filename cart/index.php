@@ -1,10 +1,30 @@
 <?php
     session_start();
     include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
+    
+    if (!isset($_SESSION['login'])){
+        echo "<script>alert('로그인 후 이용 가능합니다.');history.back(-1);</script>";
+        exit;
     }
+    $idx = isset($_GET['idx']) ? $_GET['idx'] : '';
+    if($idx == ''){
+        echo "<script>alert('정상적인 입력값이 아닙니다.');history.back(-1);</script>";
+        exit;
+    }
+    $username = $_SESSION['login'];
+    $query = "SELECT * FROM users WHERE username='$username'";
+    $result = $db_conn->query($query);
+    $row = $result->fetch_assoc();
+    $carts = explode(",", $row['lecture']);
+
+    $query = 'SELECT * FROM lecture';
+    $result = $db_conn->query($query);
+    $rows = array();
+
+    while ($row = $result->fetch_assoc()) {
+        $rows[] = $row;
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +34,7 @@
     <title>CodeLearn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="./utils/main.css">
-    <link rel="stylesheet" href="./utils/common.js">
+    <link rel="stylesheet" href="../utils/main.css">
     <style>
         /* 검색창에서 플레이스 홀더 글자 설정 */
         input::placeholder {
@@ -135,6 +154,25 @@
             margin: auto;
             margin-top: 100px;
         }
+        .main-banner {
+            margin-top: 10px;
+            width: 100%;
+            height: 300px;
+            background-color: black;
+            display: flex;
+            flex-wrap: wrap; /* 추가: flex 컨테이너가 작아질 때 줄바꿈 허용 */
+        }
+        .client-info{
+            border : 1px solid gray;
+            height: 150px;
+            margin-top: 30px;
+            border-radius : 10px;
+        }
+        .credit-info{
+            border : 1px solid gray;
+            height: 300px;
+            border-radius : 10px;
+        }
     </style>
 </head>
 <body>
@@ -176,7 +214,7 @@
                             <a class="nav-link" href="../loadmap/index.php"><strong>로드맵</strong></a>
                         </li>
                         <form class="d-flex" role="search" id="container" style="width:350px" action="../search/index.php">
-                            <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
+                            <input autocomplete="off" name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button type="submit">🔍</button>
                         </form>
                             <?php
@@ -217,25 +255,72 @@
                 </div>
             </div>
         </nav>
-        <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
+        <div style="display:flex">
+            <div style="padding:40px; width:70%">
+                <h4><strong>수강 바구니</strong></h4>
+                <input type="checkbox" id="all-check">전체선택
+                <hr>
+                <?php for($i=0; $i<count($carts); $i++){ ?>
+                <div style="margin-bottom:20px; display:flex;">
+                    <div style="width:90%">
+                        <form action="">
+                            <input type="checkbox" style="margin-right:30px;"><img src="<?=$rows[$i]['img']?>" alt="" style="max-width:150px; margin-right:20px;"><strong><?=$rows[$i]['name']?></strong>
+                        </form>
                     </div>
-                </form>
+                    <div style="margin:auto;">
+                        <strong><?= round($rows[$i]['price'])?>₩</strong>
+                    </div>
+                </div>
+                <?php } ?>
+            </div> 
+            <div style="width:25%">
+                <div class="client-info">
+                    <p style="text-align:center; items-center;"><strong>구매자 정보</strong></p>
+                    <hr>
+                    <div style="display: flex;">
+                        <div style="padding:0px; margin:0px;font-size:10px; padding:5px; width:70%;">
+                            <p>이름 </p>
+                            <p>이메일 </p>
+                            <p>핸드폰 번호 </p>
+                        </div>
+                    </div>
+                    <div class="credit-info">
+                        <div>
+                            <p><strong>쿠폰</strong></p>
+                            <div style="display: flex; margin:center; text-align:center">
+                                <div style="height:40px; width:150px; border:1px solid gray; border-radius:5px"></div>
+                                <button type="button" class="btn btn-outline-success" style="width:80px; font-size:13px; padding:0px;margin:0px">쿠폰선택</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
             </div>
         </div>
     </div>    
+    <script>
+            const register = document.querySelector('#register');
+            document.querySelectorAll('.nav-link').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            window.addEventListener('scroll', function() {
+                const registerBox = document.querySelector('#register');
+                if (window.scrollY >= 450) {
+                    registerBox.classList.add('fixed');
+                } else {
+                    registerBox.classList.remove('fixed');
+                }
+            });
+            window.addEventListener('scroll', function() {
+                console.log(window.scrollY);
+            });
+
+    </script>
 </body>
 </html>

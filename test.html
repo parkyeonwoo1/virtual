@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll to Dynamic Element</title>
+    <style>
+        body {
+            height: 2000px;
+        }
+        .target {
+            margin-top: 500px;
+            padding: 20px;
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <button data-target="target1">Scroll to Element 1</button>
+    <button data-target="target2">Scroll to Element 2</button>
+    <button data-target="target3">Scroll to Element 3</button>
+
+    <div id="target1" class="target">Target Element 1</div>
+    <div id="target2" class="target">Target Element 2</div>
+    <div id="target3" class="target">Target Element 3</div>
+
+    <script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

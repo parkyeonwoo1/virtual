@@ -1,9 +1,12 @@
 <?php
     session_start();
     include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
+
+    $query = 'SELECT * FROM study';
+    $result = $db_conn->query($query);
+    $studys = [];
+    while ($row = $result->fetch_assoc()){
+        $studys[] = $row;
     }
 ?>
 <!DOCTYPE html>
@@ -135,6 +138,16 @@
             margin: auto;
             margin-top: 100px;
         }
+        .review-container{
+            padding: 20px; 
+            border: solid gray 0.1px; 
+            background-color: whitesmoke; 
+            border-radius: 5px; 
+            width: 800px; 
+            margin:auto;
+            overflow-wrap: break-word;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -167,16 +180,16 @@
                                 <strong>커뮤니티</strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="../community/qna.php">질문 & 답변</a></li>
-                                <li><a class="dropdown-item" href="../community/review.php">수강평</a></li>
-                                <li><a class="dropdown-item" href="../community/study.php">스터디</a></li>
+                                <li><a class="dropdown-item" href="./qna.php">질문 & 답변</a></li>
+                                <li><a class="dropdown-item" href="./review.php">수강평</a></li>
+                                <li><a class="dropdown-item" href="./study.php">스터디</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../loadmap/index.php"><strong>로드맵</strong></a>
                         </li>
                         <form class="d-flex" role="search" id="container" style="width:350px" action="../search/index.php">
-                            <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
+                            <input autocomplete="off" name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button type="submit">🔍</button>
                         </form>
                             <?php
@@ -218,23 +231,20 @@
             </div>
         </nav>
         <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
+         <div style="text-align:center; margin:auto; width:300px; height:100px;">
+         <button style="margin-top:20px;" type="button" class="btn btn-outline-success" onClick="location.href='./make.php'">스터디 개설하기 !</button>  
+         </div>
+         <div style="margin-bottom: 20px;">
+            <?php for($i=0; $i<count($studys); $i++){ ?> 
+                <div class="review-container">
+                    <h5 style="text-align:center"><strong><?= str_replace("&lt;br&gt;", "\r\n", $studys[$i]['title'])?>(<?= $studys[$i]['name']?>님)</strong></h5>
+                    <h6 style="text-align:center"><strong>스터디 목표</strong></h6>
+                    <p style="text-align:center;"><?= str_replace("&lt;br&gt;", "\r\n", $studys[$i]['objective'])?></p>
+                    <div style="text-align:center; margin:auto;">
+                        <button style="margin-top:20px;" type="button" class="btn btn-outline-danger" onClick="location.href='./join.php?num=<?= $studys[$i]['idx']?>'">참여하기</button>  
                     </div>
-                </form>
-            </div>
+                </div>
+            <?php } ?>
         </div>
     </div>    
 </body>

@@ -9,7 +9,8 @@ CREATE TABLE users (
     password VARCHAR(100) NOT NULL,
     hash VARCHAR(64) NOT NULL,
     introduction TEXT,
-    profile TEXT
+    profile TEXT,
+    lecture VARCHAR(255)
 );
 
 CREATE TABLE board (
@@ -23,11 +24,12 @@ CREATE TABLE board (
 
 CREATE TABLE review (
     idx INT(11) AUTO_INCREMENT PRIMARY KEY,
-    content VARCHAR(255),
+    content TEXT,
     username VARCHAR(255)
 );
 
 CREATE TABLE user_info (
+    idx INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     password VARCHAR(100),
     ssn VARCHAR(20),
@@ -35,20 +37,79 @@ CREATE TABLE user_info (
 );
 
 CREATE TABLE lecture (
+    idx INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     img VARCHAR(100),
-    grade double(10,3)
+    grade double(10,3),
+    intro TEXT,
+    curriculum VARCHAR(255),
+    detailcurri TEXT,
+    price DECIMAL(10,2)
 );
 
-INSERT INTO lecture(name, img, grade) values('[UNITY] 유니티로 입문하는 게임 프로그래밍', '../images/1.png', '4.68');
-INSERT INTO lecture(name, img, grade) values('[악성코드] 인공지능을 이용한 악성코드 분석 및 탐지', '../images/2.png', '4.81');
-INSERT INTO lecture(name, img, grade) values('[iOS] iOS 프로그래밍 - 이론과 실습', '../images/3.png', '4.26');
-INSERT INTO lecture(name, img, grade) values('[정보보안] 사이버 시큐리티 - 웹해킹', '../images/4.png', '4.73');
-INSERT INTO lecture(name, img, grade) values('HTML/CSS/JavaScript 한 번에 끝내기', '../images/5.png', '4.72');
-INSERT INTO lecture(name, img, grade) values('[System] 초심자를 위한 시스템 해킹', '../images/6.png', '4.88');
-INSERT INTO lecture(name, img, grade) values('[AI] 생성형 인공지능 & LLM 공격 및 분석', '../images/7.png', '4.93');
-INSERT INTO lecture(name, img, grade) values('코틀린을 통해 개발하는 안드로이드', '../images/8.png', '4.62');
-INSERT INTO lecture(name, img, grade) values('S/W 엔지니어를 위한 로드맵', '../images/9.png', '4.99');
-INSERT INTO lecture(name, img, grade) values('클라우드 아키텍처의 A-Z', '../images/10.png', '4.55');
-INSERT INTO lecture(name, img, grade) values('데이터분석가를 위한 로드맵', '../images/11.png', '4.19');
-INSERT INTO lecture(name, img, grade) values('현대 운영체제의 이해', '../images/12.png', '4.28');
+CREATE TABLE study (
+    idx int(11) primary key AUTO_INCREMENT,
+    title VARCHAR(100),
+    img VARCHAR(100),
+    objective VARCHAR(255),
+    way VARCHAR(255),
+    rule VARCHAR(255),
+    member int(11),
+    name VARCHAR(255),
+    list TEXT
+);
+CREATE TABLE board (
+    idx INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    writer VARCHAR(50) NOT NULL,
+    content TEXT NOT NULL,
+    regdate DATETIME NOT NULL,
+    filename VARCHAR(255),
+    password VARCHAR(50) NOT NULL
+);
+CREATE TABLE comments (
+    idx INT(11) AUTO_INCREMENT PRIMARY KEY,
+    id VARCHAR(255) NOT NULL,
+    reg DATETIME NOT NULL DEFAULT current_timestamp(),
+    boardidx INT(11),
+    comment_text TEXT
+);
+
+
+INSERT INTO lecture(name, img, grade, price) values('[UNITY] 유니티로 입문하는 게임 프로그래밍', '../images/1.png', '4.68');
+INSERT INTO lecture(name, img, grade, price) values('[악성코드] 인공지능을 이용한 악성코드 분석 및 탐지', '../images/2.png', '4.81');
+INSERT INTO lecture(name, img, grade, price) values('[iOS] iOS 프로그래밍 - 이론과 실습', '../images/3.png', '4.26');
+INSERT INTO lecture(name, img, grade, price) values('[정보보안] 사이버 시큐리티 - 웹해킹', '../images/4.png', '4.73');
+INSERT INTO lecture(name, img, grade, price) values('HTML/CSS/JavaScript 한 번에 끝내기', '../images/5.png', '4.72');
+INSERT INTO lecture(name, img, grade, price) values('[System] 초심자를 위한 시스템 해킹', '../images/6.png', '4.88');
+INSERT INTO lecture(name, img, grade, price) values('[AI] 생성형 인공지능 & LLM 공격 및 분석', '../images/7.png', '4.93');
+INSERT INTO lecture(name, img, grade, price) values('코틀린을 통해 개발하는 안드로이드', '../images/8.png', '4.62');
+INSERT INTO lecture(name, img, grade, price) values('S/W 엔지니어를 위한 로드맵', '../images/9.png', '4.99');
+INSERT INTO lecture(name, img, grade, price) values('클라우드 아키텍처의 A-Z', '../images/10.png', '4.55');
+INSERT INTO lecture(name, img, grade, price) values('데이터분석가를 위한 로드맵', '../images/11.png', '4.19');
+INSERT INTO lecture(name, img, grade, price) values('현대 운영체제의 이해', '../images/12.png', '4.28');
+INSERT INTO lecture(name, img, grade, price) values('입문자를 위한 암호학', '../images/13.png', '4.89');
+INSERT INTO lecture(name, img, grade, price) values('SSL과 PKI를 통해 배우는 암호체계', '../images/14.png', '4.19');
+INSERT INTO lecture(name, img, grade, price) values('현대 암호학 응용', '../images/15.png', '5.00');
+INSERT INTO lecture(name, img, grade, price) values('블록체인 암호학', '../images/16.png', '4.66');
+INSERT INTO lecture(name, img, grade, price) values('네트워크 보안 핵심요소', '../images/17.png', '4.90');
+INSERT INTO lecture(name, img, grade, price) values('소켓 프로그래밍을 통한 네트워크', '../images/18.png', '4.98');
+INSERT INTO lecture(name, img, grade, price) values('AWS를 통한 클라우드 이해', '../images/19.png', '4.44');
+INSERT INTO lecture(name, img, grade, price) values('네트워크 관리사 2급 올인원', '../images/20.png', '4.37');
+INSERT INTO lecture(name, img, grade, price) values('보안 장비를 통해 배우는 네트워크 보안', '../images/21.png', '4.86');
+INSERT INTO lecture(name, img, grade, price) values('데이터베이스 구조 이해', '../images/22.png', '4.55');
+INSERT INTO lecture(name, img, grade, price) values('프로그래머를 위한 MySQL', '../images/23.png', '4.74');
+INSERT INTO lecture(name, img, grade, price) values('실무자를 위한 데이터 분석', '../images/24.png', '4.63');
+
+
+insert into review(content, username) values('컴퓨터 구조를 수강하지 못하고 컴공복전을 마무리했었는데 덕분에 이해가 쏙쏙 되었습니다. 감사합니다.', 'BACK HO KIM');
+insert into review(content, username) values('실용적인 내용이 추려져 있고 각 파트 자체도 알찬 구성입니다. 찾던 강의네요.', '스기다시');
+insert into review(content, username) values('드디어 자바 기본편까지 완강했습니다..! 입문편 완강하고 기본편 시작할 때만 해도 기본편도 금방 완강할 수 있겠지 ㅎㅎ 했는데 입문편의 2~3배는 걸린 것 같네요.. 군 간부로 일하면서 퇴근 후, 주말을 이용해서 공', 'asdf1234');
+insert into review(content, username) values('처음 접해보는 cypress였습니다. 알고는 있었는데 어떻게 활용해야 할 지 몰라 막막했었는데 마침 딱 강의가 나와주고 그 이전 강의인 next를 딱 듣고 와서 전반적인 프로젝트에 대한 구성도 알고 있다보니 쉽게 접근이 가능했던 것 같습니다. 감사합니다.', 'SK');
+insert into review(content, username) values('강의 아주 잘 봤습니다. 캡틴 맞네!!', 'dusdnWkd');
+insert into review(content, username) values('이해가 쏙쏙 잘 됐습니다 완전 강추', 'bob13');
+insert into review(content, username) values('Spring 처음 공부하는데도, 깊고 넓은 지식을 바탕으로 선배 개발자로써의 팁들과 정보들을 많이 알려주십니다.', 'minju222');
+insert into review(content, username) values('초보자도 알기 쉽게 설명해주시고 질문 답변이 매우 빠르시고 친절하십니다!! 개인적으로 정말 얻어가는게 많았어요', '채영');
+insert into review(content, username) values('현재 한국어로된 해킹 자료가 많이 없는데, 이 강의에 잘 정리되어 있고 입문 자료로서 좋은 거 같다.', '연우짱짱123');
+
+insert into study(title, img, content) values('매일 1문제씩 푸는 백준코테 스터디', '', '');

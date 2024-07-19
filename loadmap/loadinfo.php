@@ -1,10 +1,26 @@
 <?php
     session_start();
     include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
+    
+    $idx = isset($_GET['div']) ? $_GET['div'] : '';
+    if($idx == ''){
+        echo "<script>alert('정상적인 입력값이 아닙니다.');history.back(-1);</script>";
+        exit;
     }
+
+
+    $query = 'SELECT * FROM lecture WHERE idx = ?';
+    $stmt = $db_conn->prepare($query);
+    $stmt->bind_param('i', $idx);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    
+    $grade = round($row['grade']);
+    $star = str_repeat('⭐', $grade);
+    $curriculum = explode(",", $row['curriculum']);
+    $detailcurri = explode("@", $row['detailcurri']);
+    $price = round($row['price'] / 6);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +30,7 @@
     <title>CodeLearn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="./utils/main.css">
-    <link rel="stylesheet" href="./utils/common.js">
+    <link rel="stylesheet" href="../utils/main.css">
     <style>
         /* 검색창에서 플레이스 홀더 글자 설정 */
         input::placeholder {
@@ -135,6 +150,53 @@
             margin: auto;
             margin-top: 100px;
         }
+        .main-banner {
+            margin-top: 10px;
+            width: 100%;
+            height: 300px;
+            background-color: black;
+            display: flex;
+            flex-wrap: wrap; /* 추가: flex 컨테이너가 작아질 때 줄바꿈 허용 */
+        }
+
+        .text-container {
+            width: 60%;
+            height: 100%;
+            padding: 80px;
+            color: white;
+            box-sizing: border-box; /* 추가: 패딩 포함 박스 크기 계산 */
+        }
+
+        .picture-container {
+            width: 40%; /* 수정: width 0% -> 40%로 변경하여 사진 컨테이너 공간 확보 */
+            height: 100%; /* 수정: height 50% -> 100%로 변경하여 사진 컨테이너 높이 설정 */
+            padding: 30px;
+            box-sizing: border-box; /* 추가: 패딩 포함 박스 크기 계산 */
+        }
+
+        .picture-container img {
+            width: 100%;
+            height: 100%;
+        }
+        .lecture-register-box {
+            background-color: whitesmoke;
+            height: 300px;
+            width: 40%;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 0px;
+            top: 400px; /* 화면 상단에서 100px 떨어진 위치에 고정 */
+            right: 10%; /* 화면 오른쪽에서 10% 떨어진 위치에 고정 */
+            z-index: 1000; /* 다른 요소들보다 위에 표시되도록 z-index 설정 */
+            border : solid 1px gray;
+        }
+        .fixed {
+            position: fixed;
+            top: 0;
+            right: 10%;
+            z-index: 1000;
+            width:32%;
+        }
     </style>
 </head>
 <body>
@@ -217,25 +279,90 @@
                 </div>
             </div>
         </nav>
-        <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
+        <div class="main-banner">
+            <div class="text-container">
+                <h3><strong><?=$row['name']?></strong></h3>
+                <h5><?=$star ,$row['grade']?></h5>
+            </div>
+            <div class="picture-container">
+                <img src="<?=$row['img']?>" alt="">
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" data-target="target1">강의소개</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#" data-target="target2">커리큘럼</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="../community/qna.php" data-target="target4">수강전 문의</a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+        <div style="width:100%; display:flex">
+            <div style="width:60%; border:solid 1px gray;border-radius:5px">
+                <div style="padding:20px;">
+                    <?=$row['intro']?>
+                </div>
+                <div class="accordion" id="target2">
+                    <?php for($i=0; $i<count($curriculum); $i++){ ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse100+<?=$i?>" aria-expanded="false" aria-controls="collapse100+<?=$i?>">
+                        <?= $curriculum[$i] ?>
+                        </button>
+                        </h2>
+                        <div id="collapse100+<?=$i?>" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <?php $detailCnt = explode(",", $detailcurri[$i]);
+                        for ($j=0; $j<count($detailCnt); $j++){ ?>
+                        <div class="accordion-body" style="height:5px; padding:10px;">
+                            <p style="text-align: left;">⏯ <?=$detailCnt[$j]?></p>
+                        </div>
+                        <hr>
+                        <?php } ?>
+                        </div>
                     </div>
-                </form>
+                    <?php } ?>
+                </div>
+            </div>
+            <div class="lecture-register-box" style="text-align:center;" id="register">
+                <h5><strong>월 <?=$price?>원 (6개월 할부시)</strong></h5>
+                <h5><?=round($row['price'])?>원</h5>
+                <p>수강 기한 : 무제한</p>
+                <p>수료증 : 발급</p>
+                <button type="button" class="btn btn-success" style="margin:auto; text-align:center; width:70%; height:20%">바로 수강신청 하기</button>
             </div>
         </div>
     </div>    
+    <script>
+            const register = document.querySelector('#register');
+            document.querySelectorAll('.nav-link').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            window.addEventListener('scroll', function() {
+                const registerBox = document.querySelector('#register');
+                if (window.scrollY >= 450) {
+                    registerBox.classList.add('fixed');
+                } else {
+                    registerBox.classList.remove('fixed');
+                }
+            });
+            window.addEventListener('scroll', function() {
+                console.log(window.scrollY);
+            });
+
+    </script>
 </body>
 </html>

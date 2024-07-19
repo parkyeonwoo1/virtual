@@ -1,10 +1,91 @@
 <?php
-    session_start();
-    include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
+session_start();
+include "../utils/common.php";
+include "./board/lib.php"; 
+$results = []; // 검색 결과를 저장할 배열 초기화
+
+// 기본 정렬 기준 설정
+$default_sort_column = 'idx';
+$default_sort = 'DESC';
+
+// 사용자 입력의 유효성 검사 및 SQL Injection 방지
+$allowed_columns = ['idx', 'title', 'writer', 'regdate']; // 허용되는 열 목록
+$sort_column = isset($_GET['sort_column']) && in_array($_GET['sort_column'], $allowed_columns) ? $_GET['sort_column'] : $default_sort_column;
+$sort = isset($_GET['sort']) && in_array(strtoupper($_GET['sort']), ['ASC', 'DESC']) ? strtoupper($_GET['sort']) : $default_sort;
+
+$limit = 5;
+$page_limit = 5;
+$page = isset($_GET['page']) && preg_match("/^[0-9]*$/", $_GET['page']) ? $_GET['page'] : 1;
+
+$start_page = ($page - 1) * $limit;
+
+// 전체 게시물 수 조회
+$query = "SELECT count(*) as cnt FROM board";
+$stmt = $db_conn->prepare($query);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$total = $row['cnt'];
+
+if (isset($_POST['search_type'])) {
+    // 검색 유형과 검색어 가져오기
+    $search_type = $_POST['search_type'];
+    $keyword = "%" . $_POST['keyword'] . "%";
+
+    // SQL 쿼리 및 바인딩 변수 설정
+    switch ($search_type) {
+        case 'all':
+            $query = "SELECT * FROM board WHERE title LIKE ? OR writer LIKE ? OR content LIKE ? LIMIT ?, ?";
+            $stmt = $db_conn->prepare($query);
+            $stmt->bind_param('sssii', $keyword, $keyword, $keyword, $start_page, $limit);
+            break;
+        case 'title':
+            $query = "SELECT * FROM board WHERE title LIKE ? LIMIT ?, ?";
+            $stmt = $db_conn->prepare($query);
+            $stmt->bind_param('sii', $keyword, $start_page, $limit);
+            break;
+        case 'writer':
+            $query = "SELECT * FROM board WHERE writer LIKE ? LIMIT ?, ?";
+            $stmt = $db_conn->prepare($query);
+            $stmt->bind_param('sii', $keyword, $start_page, $limit);
+            break;
+        case 'content':
+            $query = "SELECT * FROM board WHERE content LIKE ? LIMIT ?, ?";
+            $stmt = $db_conn->prepare($query);
+            $stmt->bind_param('sii', $keyword, $start_page, $limit);
+            break;
+        default:
+            echo "검색 유형을 확인할 수 없습니다.";
+            exit();
     }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $results[] = $row;
+        }
+        $num = count($results);
+} else {
+    // 기본 SQL 쿼리 실행
+    $query = "SELECT * FROM board ORDER BY $sort_column $sort LIMIT ?, ?";
+    $stmt = $db_conn->prepare($query);
+    $stmt->bind_param('ii', $start_page, $limit);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $results[] = $row;
+    }
+    $num = count($results);
+}
+$adminCnt = 0;
+$userCnt = 0;
+for($i=0; $i<count($results); $i++){
+    if($results[$i]['writer'] == 'admin'){
+        $adminCnt += 1;
+    }else{
+        $userCnt += 1;
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -167,16 +248,16 @@
                                 <strong>커뮤니티</strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="../community/qna.php">질문 & 답변</a></li>
-                                <li><a class="dropdown-item" href="../community/review.php">수강평</a></li>
-                                <li><a class="dropdown-item" href="../community/study.php">스터디</a></li>
+                                <li><a class="dropdown-item" href="./qna.php">질문 & 답변</a></li>
+                                <li><a class="dropdown-item" href="./review.php">수강평</a></li>
+                                <li><a class="dropdown-item" href="./study.php">스터디</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="../loadmap/index.php"><strong>로드맵</strong></a>
                         </li>
                         <form class="d-flex" role="search" id="container" style="width:350px" action="../search/index.php">
-                            <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
+                            <input autocomplete="off" name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button type="submit">🔍</button>
                         </form>
                             <?php
@@ -207,7 +288,7 @@
                                 }else{
                         ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mypage/index.php"><?=$_SESSION['id']?>님</a>
+                            <a class="nav-link" href="../mypage/index.php"><?=$_SESSION['login']?>님</a>
                         </li>
                         <?php
                                 }
@@ -218,24 +299,81 @@
             </div>
         </nav>
         <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
+        <div style="width: 80%; margin: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 10%; text-align:center"><a href="./qna.php?sort_column=idx&sort=asc" style="text-decoration: none; color: black">Index ▼</a></th>
+                        <th scope="col" style="width: 50%"><a href="./qna.php?sort_column=title&sort=asc" style="text-decoration: none; color: black">Title ▼</a></th>
+                        <th scope="col" style="width: 20%"><a href="./qna.php?sort_column=writer&sort=asc" style="text-decoration: none; color: black">Writer ▼</a></th>
+                        <th scope="col" style="width: 20%"><a href="./qna.php?sort_column=regdate&sort=asc" style="text-decoration: none; color: black">Date ▼</a></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <?php
+                    // 조건문을 통해서 password가 관리자 패스워드와 일치하면 공지게시글로 전환
+                    if($num != 0){
+                        for($i=0; $i<count($results); $i++){
+                            if($results[$i]['writer'] == 'admin'){ ?>
+                    <tr>
+                        <th style="text-align: center;">[공지]</th>
+                        <th><a href="./board/view.php?idx=<?=$results[$i]['idx']?>" style="color: black; text-decoration: none"><?=$results[$i]['title']?></a></th>
+                        <th>관리자</th>
+                        <th><?=date('Y-m-d', strtotime($results[$i]["regdate"]))?></th>
+                    </tr>
+                    <?php }else{ ?>
+                    <tr>
+                        <td style="text-align: center"><?=$results[$i]["idx"]?></td>
+                        <td><a href="./board/view.php?idx=<?=$results[$i]["idx"]?>" style="color: black; text-decoration: none"><?=$results[$i]["title"]?></a></td>
+                        <td><?=$results[$i]["writer"]?></td>
+                        <td><?=date('Y-m-d', strtotime($results[$i]["regdate"]))?></td>
+                    </tr>
+                    <?php }}}else { ?>
+                    <tr>
+                        <td colspan="4">Posts does not exist.</td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+            <form id="searchForm" method="post" action="./qna.php">
+                <div class="input-group mb-3">
+                    <div class="col-auto my-1" style="margin-right: 10px">
+                        <select name="search_type" id="inlineFormCustomSelect" class="form-select form-select-sm" aria-label="Small select example">
+                            <option value="all" selected>All</option>
+                            <option value="title">Title</option>
+                            <option value="writer">Writer</option>
+                            <option value="content">Content</option>
+                        </select>
                     </div>
-                </form>
+                    <input type="text" class="form-control" placeholder="Keyword Input" name="keyword" id="search_input" autocomplete="off">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+            <?php
+                $show_keyword = isset($_POST['keyword']) ? htmlspecialchars($_POST['keyword']) : '';
+                if ($show_keyword !=''){
+            ?>
+            <div class="alert alert-success  alert-dismissible fade show" role="alert">
+                <strong>"<?=$show_keyword?>"에 대한 검색 결과입니다.</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        </div>
-    </div>    
+            <?php
+                }
+            ?>
+            <div style="display: flex; justify-content: space-between;">
+                <?php
+                    $rs_str = my_pagination($total, $limit, $page_limit, $page);
+                    echo $rs_str;
+                ?>
+                <button type="button" class="btn btn-outline-success" onclick="redirectToWritePage()" style="height:40px">Write</button>
+            </div>
+        </div>    
+        <script>
+            function redirectToWritePage() {
+                window.location.href = "./board/write.php";
+            }
+        </script>
 </body>
 </html>

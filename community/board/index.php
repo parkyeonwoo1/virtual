@@ -1,10 +1,7 @@
 <?php
     session_start();
-    include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
-    }
+    include "../../utils/common.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +11,7 @@
     <title>CodeLearn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="./utils/main.css">
-    <link rel="stylesheet" href="./utils/common.js">
+    <link rel="stylesheet" href="../../utils/main.css">
     <style>
         /* 검색창에서 플레이스 홀더 글자 설정 */
         input::placeholder {
@@ -153,13 +149,13 @@
                                 <strong>강의</strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=sec">정보 보안</a></li>
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=game">게임 개발</a></li>
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=dbms">데이터베이스</a></li>
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=cs">컴퓨터 공학</a></li>
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=network">네트워크</a></li>
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=cipher">암호학</a></li>
-                                <li><a class="dropdown-item" href="../gubun/index.php?gubun=programming">프로그래밍</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=sec">정보 보안</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=game">게임 개발</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=dbms">데이터베이스</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=cs">컴퓨터 공학</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=network">네트워크</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=cipher">암호학</a></li>
+                                <li><a class="dropdown-item" href="../../gubun/index.php?gubun=programming">프로그래밍</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -167,15 +163,15 @@
                                 <strong>커뮤니티</strong>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="../community/qna.php">질문 & 답변</a></li>
-                                <li><a class="dropdown-item" href="../community/review.php">수강평</a></li>
-                                <li><a class="dropdown-item" href="../community/study.php">스터디</a></li>
+                                <li><a class="dropdown-item" href="../../community/qna.php">질문 & 답변</a></li>
+                                <li><a class="dropdown-item" href="../../community/review.php">수강평</a></li>
+                                <li><a class="dropdown-item" href="../../community/study.php">스터디</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../loadmap/index.php"><strong>로드맵</strong></a>
+                            <a class="nav-link" href="../../loadmap/index.php"><strong>로드맵</strong></a>
                         </li>
-                        <form class="d-flex" role="search" id="container" style="width:350px" action="../search/index.php">
+                        <form class="d-flex" role="search" id="container" style="width:350px" action="../../search/index.php">
                             <input name="keyword" class="form-control me-2" type="search" placeholder="나의 진짜 성장을 도와줄 실무 강의를 찾아보세요" aria-label="Search" style="border-radius:10px; ">
                             <button type="submit">🔍</button>
                         </form>
@@ -184,14 +180,14 @@
 
                             ?>
                             <li class="nav-item" style="flex:right">
-                                <a class="nav-link" href="../login/login.php"><strong>로그인</strong></a>
+                                <a class="nav-link" href="../../login/login.php"><strong>로그인</strong></a>
                             </li>
                             <?php
                                 }else{
 
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../login/logout.php"><strong>로그아웃</strong></a>
+                                <a class="nav-link" href="../../login/logout.php"><strong>로그아웃</strong></a>
                             </li>
                         <?php
                             }
@@ -201,13 +197,13 @@
                                 if($_SESSION['id'] == 'admin'){
                         ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mypage/index.php">관리자님</a>
+                            <a class="nav-link" href="../../mypage/index.php">관리자님</a>
                         </li>
                         <?php
                                 }else{
                         ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="../mypage/index.php"><?=$_SESSION['id']?>님</a>
+                            <a class="nav-link" href="../../mypage/index.php"><?=$_SESSION['id']?>님</a>
                         </li>
                         <?php
                                 }
@@ -218,23 +214,9 @@
             </div>
         </nav>
         <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
-                    </div>
-                </form>
-            </div>
+        <h2 style="margin-left:100px; margin-top: 50px"><strong>403 Forbidden...</strong></h2>
+        <div style="margin:auto; text-align:center">
+            <img src="../../images/403.png" alt="" style="width:30%">
         </div>
     </div>    
 </body>

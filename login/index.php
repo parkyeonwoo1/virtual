@@ -1,10 +1,7 @@
 <?php
     session_start();
     include "../utils/common.php";
-    if(isset($_SESSION["login"])){
-        echo "<script>alert('이미 로그인이 되어있습니다.');history.back(-1);</script>";
-        exit();
-    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +11,7 @@
     <title>CodeLearn</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="./utils/main.css">
-    <link rel="stylesheet" href="./utils/common.js">
+    <link rel="stylesheet" href="../utils/main.css">
     <style>
         /* 검색창에서 플레이스 홀더 글자 설정 */
         input::placeholder {
@@ -218,23 +214,9 @@
             </div>
         </nav>
         <!-- 부트스트랩 navbar -->
-        <div class="logincontainer">
-            <div style="text-align:center">
-                <h4><strong>로그인</strong></h4>
-                <p>코드런에서 다양한 학습 기회를 얻으세요</p>
-            </div>  
-            <div class="card-body">
-                <form class="form-signin" action="./action.php" method="POST" ><br>
-                    아이디
-                    <input type="text" id="uid" class="form-control" placeholder="example" required autofocus name="uid" autocomplete="off" autofocus style="margin-bottom:15px;">
-                    비밀번호
-                    <input type="password" id="upw" class="form-control" placeholder="**********" required autofocus name="upw" autocomplete="off" style="margin-bottom:15px;">
-                    <div style="text-align:center">
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #333; border: none;" onclick="location.href='action.php';">로그인</button>
-                        <button id="btn_reg" class="btn btn-lg btn-primary btn-block" type="button" style="background-color: #333; border: none;" onclick="location.href='register.php';">회원가입</button>
-                    </div>
-                </form>
-            </div>
+        <h2 style="margin-left:100px; margin-top: 50px"><strong>403 Forbidden...</strong></h2>
+        <div style="margin:auto; text-align:center">
+            <img src="../images/403.png" alt="" style="width:30%">
         </div>
     </div>    
 </body>
