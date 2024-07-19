@@ -19,7 +19,7 @@ CREATE TABLE board (
     writer VARCHAR(50) NOT NULL,
     content TEXT NOT NULL,
     regdate DATETIME NOT NULL,
-    filename VARCHAR(255),
+    filename VARCHAR(255)
 );
 
 CREATE TABLE review (
