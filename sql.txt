@@ -1,6 +1,5 @@
 CREATE database codelearn;
 USE codelearn;
-CREATE table users;
 
 
 CREATE TABLE users (
